@@ -17,7 +17,7 @@ def cat_gif():
         cat_data = json.load(cat_file)
     print(cat_data)
     url_list = cat_data["urls"]
-    if url_list[0]["type"] == "cat":
-        return json.dumps(url_list[0]["url"])
+    if url_list[1]["type"] == "cat":
+        return json.dumps(url_list[1]["url"])
     else:
         return 500
