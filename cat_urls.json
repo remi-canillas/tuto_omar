@@ -1,0 +1,19 @@
+{
+  "urls": [
+    {
+      "id": 0,
+      "type": "cat",
+      "url": "https://media1.tenor.com/m/iqNUmW5ajbYAAAAC/me-apparently.gif"
+    },
+    {
+      "id": 1,
+      "type": "cat",
+      "url": "https://media1.tenor.com/m/7EH5dDU5rboAAAAC/cat-apple-cats-cute.gif"
+    },
+    {
+      "id": 2,
+      "type": "dog",
+      "url": "https://media1.tenor.com/m/7l65yGRrw_QAAAAC/dog-paw.gif"
+    }
+  ]
+}

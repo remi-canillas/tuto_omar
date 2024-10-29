@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch Button with Image Update</title>
+  </head>
+  <body>
+    <!-- Bouton pour déclencher le fetch -->
+    <button id="fetchButton">Afficher le gif</button>
+
+    <!-- Image à mettre à jour -->
+    <img id="image" src="default.jpg" alt="Image par défaut" width="400" />
+
+    <script>
+      // Sélectionner le bouton et l'image par leur ID
+      const fetchButton = document.getElementById("fetchButton");
+      const imageElement = document.getElementById("image");
+
+      // Ajouter un écouteur d'événements pour le clic
+      fetchButton.addEventListener("click", () => {
+        // Effectuer la requête fetch pour récupérer l'URL de l'image
+        fetch("http://127.0.0.1:5000/cat-gif") // Exemple d'API avec URL d'image
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("La requête a échoué");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            // Supposons que `data.url` contienne l'URL de l'image
+            const imageUrl = data;
+            // Mettre à jour la source de l'image avec l'URL récupérée
+            imageElement.src = imageUrl;
+          })
+          .catch((error) => {
+            console.error("Erreur :", error);
+            alert("Impossible de charger l'image.");
+          });
+      });
+    </script>
+  </body>
+</html>
