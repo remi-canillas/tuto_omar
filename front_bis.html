@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Afficher le GIF</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        margin-top: 50px;
+      }
+      .container {
+        text-align: center;
+        width: 300px;
+        border: 1px solid #000;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      .button,
+      .feedback-button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .button {
+        background-color: #ccc;
+      }
+      .feedback-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      .feedback-button {
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
+      }
+      #gif {
+        display: none;
+        width: 100%;
+        height: 200px;
+        background-color: #f3f3f3;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <input
+        type="text"
+        id="username"
+        placeholder="Entrez votre nom"
+        style="padding: 10px; width: 80%; margin-bottom: 10px; font-size: 16px"
+      />
+      <button class="button" onclick="showGif()">Afficher le GIF</button>
+      <div id="gif">GIF</div>
+      <div class="feedback-container">
+        <button class="feedback-button" onclick="likeGif()">👍</button>
+        <button class="feedback-button" onclick="dislikeGif()">👎</button>
+      </div>
+    </div>
+
+    <script>
+      let gifId = -1;
+      function showGif() {
+        // Récupération du nom de l'utilisateur
+        const username = document.getElementById("username").value;
+        const encodedUsername = encodeURIComponent(username);
+        const url = `http://127.0.0.1:5000/favorite-gif?name=${encodedUsername}`;
+        var imageUrl;
+        fetch(url) // Exemple d'API avec URL d'image
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("La requête a échoué");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            // Supposons que `data.url` contienne l'URL de l'image
+            imageUrl = data.url;
+            gifId = data.id;
+            console.log(imageUrl);
+            // Chargement du GIF
+            const gifDiv = document.getElementById("gif");
+            gifDiv.style.display = "flex"; // Affiche le GIF
+            gifDiv.innerHTML = `<img src=${imageUrl} alt="GIF" style="max-width:100%; max-height:100%;">`; // Remplacez URL_DU_GIF par le lien réel du GIF
+          })
+          .catch((error) => {
+            console.error("Erreur :", error);
+            alert("Impossible de charger l'image.");
+          });
+      }
+
+      function likeGif() {
+        alert(`Vous avez aimé le GIF ${gifId}!`);
+        const username = document.getElementById("username").value;
+        const url = `http://127.0.0.1:5000/liked-gif`;
+
+        fetch(url, {
+          method: "POST", // Spécifie la méthode POST
+          headers: {
+            "Content-Type": "application/json", // Indique que le corps de la requête est en JSON
+          },
+          body: JSON.stringify({
+            gifId: gifId, // L'ID du GIF, ou d'autres données nécessaires
+            userName: username, // Autres paramètres si nécessaire
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Erreur lors de la requête");
+            }
+            return response.json(); // Convertit la réponse en JSON
+          })
+          .then((data) => {
+            console.log("Réponse du serveur:", data); // Manipule les données de la réponse
+            alert("Le GIF a été aimé avec succès !");
+          })
+          .catch((error) => {
+            console.error("Erreur:", error);
+            alert("Erreur lors de la requête POST");
+          });
+      }
+
+      function dislikeGif() {
+        alert("Vous n'avez pas aimé le GIF !");
+      }
+    </script>
+  </body>
+</html>
